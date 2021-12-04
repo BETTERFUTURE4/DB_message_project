@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 router.use(express.json());
 
-const {query} = require('../modules/db');
+const { query } = require('../modules/db');
+const { verifyMiddleWare } = require ('../modules/jwt');
 
 /* Put Status message */
 router.post('/userStMsg', async(req, res, next) => {
@@ -39,6 +40,7 @@ router.post('/locInfo', async(req, res, next) => {
 
     if (results == [lat, long, bd_name, f_num, ssid, ip]) {
       res.json({
+        success: false,
         errorMessage: '이전과 같은 위치입니다.'
       });
     }
@@ -47,8 +49,7 @@ router.post('/locInfo', async(req, res, next) => {
       await query (`UPDATE location SET LOCATION_STATE = 0 WHERE USER_ID = '${my_id_loc}' AND LOCATION_STATE = 1;`);
 
 
-      await query
-      (`INSERT INTO location(USER_ID, LOCATION_STATE, LATITUDE, LONGTITUDE, BD_NAME, FLOOR_NUM, SSID, IP)
+      await query (`INSERT INTO location(USER_ID, LOCATION_STATE, LATITUDE, LONGTITUDE, BD_NAME, FLOOR_NUM, SSID, IP)
       VALUES('${my_id_loc}', 1, '${lat}', '${long}', '${bd_name}', ${f_num}, '${ssid}', '${ip}');`);
   
     }
@@ -60,15 +61,16 @@ router.post('/locInfo', async(req, res, next) => {
 })
 
 /*LogOut + Location_State : 2 //YOU SHOULD SET LOCATION_STATE = 1 WHEN LOGIN */
-router.get('/signOut', verifyMiddleware, (req, res, next) => {
+router.post('/signOut', verifyMiddleWare, async(req, res, next) => {
   const {id, name} = req.decoded;
 
   if (id) {
+
+    await query(`UPDATE location SET LOCATION_STATE = 2 WHERE user_id = '${id}}' AND LOCATION_STATE = 1;`);
+
     res.clearCookie('token').json({
       success: true
     })
-
-    query(`UPDATE location SET LOCATION_STATE = 2 WHERE user_id = '${id}}' AND LOCATION_STATE = 1;`);
     
   } else {
     res.json({
