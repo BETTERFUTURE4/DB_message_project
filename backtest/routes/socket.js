@@ -43,7 +43,10 @@ module.exports = io => {
 		socket.on('CHAT_GENERAL_MESSAGE', async msg => {
 			const targetSockets = findSocketById(io, msg.targetId);
 
-			await query(`INSERT INTO chat(SENDER, RECEIVER, CREATED_AT, MSG_TYPE, TEXT) SELECT f.id, t.user_id, '${msg.created_at}', ${msg.msg_type}, '${msg.message}' FROM users f, users t WHERE f.id = '${socket.user_id}' and t.id = '${msg.targetId}';`)
+			await query(`INSERT INTO chat(SENDER, RECEIVER, CREATED_AT, MSG_TYPE, TEXT) 
+				SELECT f.id, t.user_id, '${msg.created_at}', ${msg.msg_type}, '${msg.message}' 
+				FROM users f, users t 
+				WHERE f.id = '${socket.user_id}' and t.id = '${msg.targetId}';`)
 
 			if (targetSockets.length > 0) {
 				targetSockets.forEach(soc => soc.emit('CHAT_GENERAL_MESSAGE', {
@@ -60,8 +63,22 @@ module.exports = io => {
 		socket.on('CHAT_RENDEVOUS_MESSAGE', async msg => {
 			const targetSockets = findSocketById(io, msg.targetId);
 
-			await query(`INSERT INTO chat(SENDER, RECEIVER, CREATED_AT, MSG_TYPE, TEXT, VALID_TIME) SELECT f.id, t.user_id, '${msg.created_at}', ${msg.msg_type}, '${msg.message}', ${msg.valid_time} FROM users f, users t WHERE f.id = '${socket.user_id}' and t.id = '${msg.targetId}'
-			AND EXISTS (SELECT BD_NAME, FLOOR_NUM, SSID FROM location WHERE BD_NAME = '${msg.user_bd}' AND BD_NAME = '${msg.target_bd}' AND FLOOR_NUM = ${msg.user_floor} AND FLOOR_NUM = ${msg.target_floor} AND SSID = '${msg.user_ssid}' AND SSID = '${msg.target_ssid}';) ;`);
+			await query(`
+				INSERT INTO chat(SENDER, RECEIVER, CREATED_AT, MSG_TYPE, TEXT, VALID_TIME, CHAT_STATE) 
+				SELECT f.id, t.user_id, '${msg.created_at}', ${msg.msg_type}, '${msg.message}', ${msg.valid_time}, 1 
+				FROM users f, users t 
+				WHERE f.id = '${socket.user_id}' 
+					AND t.id = '${msg.targetId}'
+					AND EXISTS (
+						SELECT BD_NAME, FLOOR_NUM, SSID 
+						FROM location WHERE BD_NAME = '${msg.user_bd}' 
+						AND BD_NAME = '${msg.target_bd}' 
+						AND FLOOR_NUM = ${msg.user_floor} 
+						AND FLOOR_NUM = ${msg.target_floor} 
+						AND SSID = '${msg.user_ssid}' 
+						AND SSID = '${msg.target_ssid}';
+					);
+				`);
 
 			if (targetSockets.length > 0) {
 				targetSockets.forEach(soc => soc.emit('CHAT_RENDEVOUS_MESSAGE', {
