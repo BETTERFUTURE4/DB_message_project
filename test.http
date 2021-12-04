@@ -1,0 +1,38 @@
+# main
+GET http://10.35.101.228:5106/api
+
+###
+# 유저의 친구목록 조회
+# 형식 : http://10.35.101.228:5106/api/friends/list/?My_id=~~~
+GET http://10.35.101.228:5106/api/friends/list/?My_id=tmp1@yonsei.ac.kr
+
+###
+# 친구 검색
+# 형식 : http://10.35.101.228:5106/api/friends?My_id=~~~&Friend_name=~~~
+GET http://10.35.101.228:5106/api/friends/search/?My_id=tmp1@yonsei.ac.kr&Friend_name=yonsei2
+
+###
+# post 친구 추가 -> 먹통...
+POST http://10.35.101.228:5106/api/friends/add
+
+Content-Type: application/json
+
+{
+    "My_id": "tmp1@yonsei.ac.kr",
+    "Friend_id": "tmp2@yonsei.ac.kr"
+}
+
+###
+# get 친구 추가
+GET http://10.35.101.228:5106/api/friends/add?My_id=tmp1@yonsei.ac.kr&Friend_id=tmp2@yonsei.ac.kr
+
+###
+
+# 친구관계 상태 변경
+# 형식 : http://10.35.101.228:5106/api/friends/My_id/Friend_id/f_state
+PUT http://10.35.101.228:5106/api/friends/set/tmp1@yonsei.ac.kr/tmp2@yonsei.ac.kr/1
+
+###
+# 특정 친구관계 제거
+# 형식 : http://10.35.101.228:5106/api/friends/My_id/Friend_id
+DELETE http://10.35.101.228:5106/api/friends/delete/tmp1@yonsei.ac.kr/tmp2@yonsei.ac.kr

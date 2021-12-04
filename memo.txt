@@ -1,0 +1,11 @@
+// 쿼리문 받았을 때 터미널에 출력
+    // app.use((req, res, next) => {
+    //     console.log(req.query);
+    //     next();
+    // });
+
+// 터미널에 출력
+    // app.use((req, res, next) => {
+    //     console.log(req.body);
+    //     next();
+    // });
