@@ -4,7 +4,7 @@
 const {query} = require('../modules/db');
 router.get('/', async(req, res, next) => {
   const {id1, id2} = req.body;
-  const queryResult = await query(`SELECT * from chat where (SENDER={$id1} and RECEIVER={$id2}) OR (SENDER=${id2} and RECEIVER={$id1});`);
+  const queryResult = await query(`SELECT * from chat where (SENDER=${id1} and RECEIVER=${id2}) OR (SENDER=${id2} and RECEIVER=${id1});`);
   if(queryResult.length > 0){
     res.json({
       success: true,
