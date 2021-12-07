@@ -1,0 +1,70 @@
+const winston = require('winston');
+const winstonDaily = require('winston-daily-rotate-file');
+
+const { combine, timestamp, printf, colorize } = winston.format;
+
+const logDir = 'logs';
+
+const logFormat = printf(info => {
+    return '${info.timestamp} ${info.level}: ${info.message}';
+});
+
+//Log level _ error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
+
+const logger = winston.createLogger({
+    format: combine(
+        timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss',
+        }),
+        logFormat,
+    ),
+    transports: [
+        //info level log file
+        new winstonDaily({
+            level: 'info',
+            datePattern: 'YYYY-MM-DD',
+            dirname: logDir,
+            filename: '%DATE%.log',
+            maxFiles: 30,       //Maximum 30days log file
+            zippedArchive: true,
+        }),
+        //warn level log file
+        new winstonDaily({
+            level: 'warn',
+            datePattern: 'YYYY-MM-DD',
+            dirname: logDir+ '/warn',
+            filename: '%DATE%.warn.log',
+            maxFiles: 30,
+            zippedArchive: true,
+        }),
+        //error level log file
+        new winstonDaily({
+            level: 'error',
+            datePattern: 'YYYY-MM-DD',
+            dirname: logDir + '/error',
+            filename: '%DATE%.error.log',
+            maxFiles: 30,
+            zippedArchive: true,
+        }),
+    ],
+});
+
+//morgan winston Setting
+logger,stream = {
+    write: message => {
+        logger.info(message);
+    }
+}
+
+
+//If not production env, print log with low resources
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: combine(
+            colorize({all: true}),
+            logFormat
+        )
+    }));
+}
+
+module.exports = logger;

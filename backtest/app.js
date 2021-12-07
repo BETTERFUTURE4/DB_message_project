@@ -2,7 +2,13 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var logger = require('./winston');
+var morgan = require ('morgan');
+var combined = ':remote-addr - :remote-user ".method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'
+
+var morganFormat = process.env.NODE_ENV !== "production" ? "dev" : combined;
+console.log(morganFormat);
+
 
 var indexRouter = require('./routes/route_my_info');
 var usersRouter = require('./routes/route_place');
@@ -37,5 +43,30 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.use(morgan(morganFormat, {stream : logger.stream}));
+
+app.get('/', (req, res, next) => {
+  logger.info('GET /');
+  res.status(200).send({
+    message : "info test!"
+  })
+});
+
+app.get('/warn', (req, res, next) => {
+  logger.warn('warning');
+  res.status(400).send({
+    message : "warning test!"
+  })
+});
+
+app.get('/error', (req, res, next) => {
+  logger.error('Error message');
+  res.status(500).send({
+    message : "error test!"
+  })
+});
+
+app.listen(port, () => logger.info(`Server Start Listening on port ${port}`));
 
 module.exports = app;
