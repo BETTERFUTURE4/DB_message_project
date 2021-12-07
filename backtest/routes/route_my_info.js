@@ -34,10 +34,11 @@ Bc the row will be created only when the user pressed the 'UPDATE' button */
 router.post('/locInfo', async(req, res, next) => {
   try {
     const {my_id_loc, lat, long, bd_name, f_num, ssid, ip} = req.body;
-    const queryCheck = await query (`SELECT EXISTS (SELECT LATITUDE, LONGTITUDE, BD_NAME, FLOOR_NUM, SSID, IP FROM location
-                                    WHERE USER_ID = '${my_id_loc}'AND LOCATION_STATE = 1)`);
+    const queryCheck = await query (`SELECT EXISTS (SELECT * FROM location
+                                    WHERE USER_ID = '${my_id_loc}'AND LOCATION_STATE = 1 AND LATITUDE = '${lat} AND LONGTITUDE = '${long}' AND BD_NAME = '${bd_name}'
+                                    AND FLOOR_NUM = ${f_num} AND SSID = '${ssid}' AND IP = '${ip}')`);
 
-    if (results == [lat, long, bd_name, f_num, ssid, ip]) {
+    if (queryCheck == 1) {
       res.json({
         success: false,
         errorMessage: '이전과 같은 위치입니다.'
@@ -45,11 +46,11 @@ router.post('/locInfo', async(req, res, next) => {
     }
 
     else {
-      await query (`UPDATE location SET LOCATION_STATE = 0 WHERE USER_ID = '${my_id_loc}' AND LOCATION_STATE = 1;`);
+      await query (`UPDATE location SET LOCATION_STATE = 0 WHERE USER_ID = '${my_id_loc}' AND LOCATION_STATE = 1`);
 
 
       await query (`INSERT INTO location(USER_ID, LOCATION_STATE, LATITUDE, LONGTITUDE, BD_NAME, FLOOR_NUM, SSID, IP)
-      VALUES('${my_id_loc}', 1, '${lat}', '${long}', '${bd_name}', ${f_num}, '${ssid}', '${ip}');`);
+      VALUES('${my_id_loc}', 1, '${lat}', '${long}', '${bd_name}', ${f_num}, '${ssid}', '${ip}')`);
   
     }
 
@@ -65,7 +66,7 @@ router.post('/signOut', verifyMiddleWare, async(req, res, next) => {
 
   if (id) {
 
-    await query(`UPDATE location SET LOCATION_STATE = 2 WHERE user_id = '${id}}' AND LOCATION_STATE = 1;`);
+    await query(`UPDATE location SET LOCATION_STATE = 2 WHERE user_id = '${id}' AND LOCATION_STATE = 1`);
 
     res.clearCookie('token').json({
       success: true
@@ -84,10 +85,10 @@ router.post('/', async(req, res, next) => {
   try {
     const {delId, delPW} = req.body;
 
-    await query(`SELECT * from user WHERE id = '${delId}' AND pw = '${delPW}';`);
+    await query(`SELECT * from user WHERE id = '${delId}' AND pw = '${delPW}'`);
       if (!err) {
         if (rows[0] != undefined) {
-          await query(`DELETE from user WHERE id = '${id}';`);
+          await query(`DELETE from user WHERE id = '${id}'`);
             if (!err) {
               res.send('탈퇴 완료');
             }
