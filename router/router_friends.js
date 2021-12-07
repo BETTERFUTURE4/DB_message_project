@@ -39,33 +39,11 @@ router.get('/search/', async (req,res) => {
     }
 });
 
-// 친구 추가->error?
 // post로 friends에 새로운 값 추가
 router.post('/add', async (req,res,next) => {
     var { My_id, Friend_id } = req.body;
     console.log(req.body);
     console.log("post 친구추가 시도: " + `${My_id} -> ${Friend_id}`);
-
-    // 쿼리로 나와 친구의 존재여부 확인
-    var isIn = await query(`SELECT * FROM user WHERE ID = '${My_id}' OR ID = '${Friend_id}'`);
-    var isFriend = await query(`SELECT * FROM friends WHERE my_id = '${My_id}' AND friend_id = '${Friend_id}' AND f_state = 1`)
-
-    if (isIn.length === 2 && isFriend.length === 0) {
-        // 쿼리로 해당 유저의 특정 친구 반환
-        var queryString = `INSERT INTO friends VALUES(null, '${My_id}', '${Friend_id}', 1);`;
-        await query(queryString);
-        res.send(`${My_id} - add friend : ${Friend_id}`);
-    } else if (isFriend.length  > 0) {
-        res.send("Already frined");
-    }else {
-        res.send("No that person");
-    }
-});
-
-// 대안 : get으로 친구 추가
-router.get('/add', async (req,res) => {
-    var { My_id, Friend_id } = req.query;
-    console.log("get 친구추가 시도: " + `${My_id} -> ${Friend_id}`);
 
     // 쿼리로 나와 친구의 존재여부 확인
     var isIn = await query(`SELECT * FROM user WHERE ID = '${My_id}' OR ID = '${Friend_id}'`);
