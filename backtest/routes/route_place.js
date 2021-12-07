@@ -9,7 +9,7 @@ const {query} = require('../modules/db');
 router.get('/place', async(req, res, next) => {
   try {
     const place_userID = req.body;
-    [rows, fields] = await query (`SELECT BD_NAME, FLOOR_NUM, SSID FROM location WHERE USER_ID = '${place_userID}';`);
+    [rows, fields] = await query (`SELECT BD_NAME, FLOOR_NUM, SSID FROM location WHERE BD_NAME IN (SELECT BD_NAME FROM location WHERE USER_ID = '${place_userID}' AND LOCATION_STATE = 1;`);
     
     res.send(rows);
     
@@ -24,7 +24,7 @@ router.get('/:SSID', async(req, res, next) => {
   try {
     const { userID, this_ssid } = req.body;
     [rows, fields] = await query (`SELECT NAME, TYPE, LOGIN_STATE, STATUS_MESSAGE
-                                  FROM user WHERE ID = user_id IN (SELECT user_id FROM location
+                                  FROM user WHERE ID IN (SELECT user_id FROM location
                                   WHERE SSID = '${this_ssid}' AND LOCATION_STATE = 1 OR LOCATION_STATE = 2
                                   AND USER_ID != '${userID}';);`);
 
