@@ -18,7 +18,7 @@ router.post('/userStMsg', async(req, res, next) => {
       });
     }
     else {
-      await query(`UPDATE user SET status_message = '${statusMsg}' WHERE id = '${My_id}';`);
+      await query(`UPDATE user SET status_message = '${statusMsg}' WHERE id = '${My_id}'`);
     }
   } catch (error) {
     next(error)
@@ -34,9 +34,8 @@ Bc the row will be created only when the user pressed the 'UPDATE' button */
 router.post('/locInfo', async(req, res, next) => {
   try {
     const {my_id_loc, lat, long, bd_name, f_num, ssid, ip} = req.body;
-    let queryCheck = [];
-    queryCheck = await query (`SELECT LATITUDE, LONGTITUDE, BD_NAME, FLOOR_NUM, SSID, IP FROM location
-                                    WHERE USER_ID = '${my_id_loc}'AND LOCATION_STATE = 1;`);
+    const queryCheck = await query (`SELECT EXISTS (SELECT LATITUDE, LONGTITUDE, BD_NAME, FLOOR_NUM, SSID, IP FROM location
+                                    WHERE USER_ID = '${my_id_loc}'AND LOCATION_STATE = 1)`);
 
     if (results == [lat, long, bd_name, f_num, ssid, ip]) {
       res.json({
