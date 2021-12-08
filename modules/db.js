@@ -12,7 +12,7 @@ const connection = mysql.createPool({
 const connection = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: '110318', // DB password
+    password: 'test', // DB password
     port: 3306,
     database: 'db', // DB name
     multipleStatements: true,
