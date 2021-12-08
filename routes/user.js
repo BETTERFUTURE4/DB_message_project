@@ -52,6 +52,7 @@ router.post('/login', async(req, res, next) => { // -- 1
       name: queryResult[0].NAME
     });
     await query(`UPDATE user SET LOGIN_STATE = 1 WHERE user.ID = '${id}';`);
+    await query(`UPDATE location SET LOCATION_STATE = 1 WHERE user_id = '${id}' AND (LOCATION_STATE = 2 OR LOCATION_STATE = NULL)`);
   }
   else{ // account not exists
     res.json({ // response
@@ -69,6 +70,7 @@ router.post('/logout', verifyMiddleWare, async(req, res, next) => {
       success: true
     })
     await query(`UPDATE user SET LOGIN_STATE = 0 WHERE user.ID = '${id}';`);
+    await query(`UPDATE location SET LOCATION_STATE = 2 WHERE user_id = '${id}' AND LOCATION_STATE = 1`);
   }
   else{
     res.json({ // error
@@ -79,12 +81,14 @@ router.post('/logout', verifyMiddleWare, async(req, res, next) => {
 });
 
 // Get Login Status
-router.get('/whoAmI', verifyMiddleWare, (req, res, next) => {
+router.get('/whoAmI', verifyMiddleWare, async(req, res, next) => {
   const {id, name} = req.decoded;
-  res.json({ // response id and name
+  const {stMsg} = await query(`SELECT STATUS_MESSAGE FROM user WHERE ID = '${id}'`);
+  res.json({ // response id, name and status message
     success: id ? true : false,
     id,
-    name
+    name,
+    stMsg
   })
 });
 
