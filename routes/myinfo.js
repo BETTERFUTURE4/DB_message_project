@@ -81,7 +81,7 @@ router.post('/signOut', verifyMiddleWare, async(req, res, next) => {
 });
 
 /*Delete Account*/
-router.post('/', async(req, res, next) => {
+router.post('/delAccount', async(req, res, next) => {
   try {
     const {delId, delPW} = req.body;
 
