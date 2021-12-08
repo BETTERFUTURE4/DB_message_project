@@ -13,6 +13,8 @@ var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var chatlistRouter = require('./routes/chatlist');
 var router_friends = require('./routes/friends');
+var router_myinfo = require('./routes/myinfo');
+var router_location = require('./routes/location');
 var app = express();
 
 // view engine setup
@@ -30,6 +32,8 @@ app.use('/', indexRouter);
 app.use('/api/user', userRouter);
 app.use('/api/chatlist', chatlistRouter);
 app.use('/api/friends',router_friends);
+app.use('/api/myinfo', router_myinfo);
+app.use('/api/location', router_location);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
