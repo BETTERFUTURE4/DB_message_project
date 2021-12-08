@@ -20,7 +20,7 @@ router.get('/place', async(req, res, next) => {
 });
 
 /* Get online users list */
-router.get('/:SSID', async(req, res, next) => {
+router.get('/SSID', async(req, res, next) => {
   try {
     const { userID, this_ssid } = req.body;
     [rows, fields] = await query (`SELECT NAME, TYPE, LOGIN_STATE, STATUS_MESSAGE
