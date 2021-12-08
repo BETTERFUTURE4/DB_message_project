@@ -24,7 +24,7 @@ router.get('/list/', async (req,res) => {
 });
 
 // 유저의 친구 검색
-router.get('/search/', async (req,res) => {
+router.get('/search', async (req,res) => {
     var  { My_id, Friend_name } = req.body;
     console.log(`${My_id}, ${Friend_name}`);
 
