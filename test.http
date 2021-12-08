@@ -1,0 +1,58 @@
+# main
+GET http://localhost:8080/
+
+###
+# 유저의 친구목록 조회
+GET http://localhost:8080/api/friends/list/
+
+Content-Type: application/json
+
+{
+    "My_id": "tmp1@yonsei.ac.kr",
+}
+
+###
+# 친구 검색
+GET http://localhost:8080/api/friends/search/
+
+Content-Type: application/json
+
+{
+    "My_id": "tmp1@yonsei.ac.kr",
+    "Friend_name" : "yonsei2"
+}
+
+###
+# post 친구 추가
+POST http://localhost:8080/api/friends/add
+
+Content-Type: application/json
+
+{
+    "My_id": "tmp1@yonsei.ac.kr",
+    "Friend_id": "tmp2@yonsei.ac.kr"
+}
+
+###
+
+# 친구관계 상태 변경
+POST http://localhost:8080/api/friends/alter
+
+Content-Type: application/json
+
+{
+    "My_id": "tmp1@yonsei.ac.kr",
+    "Friend_id": "tmp2@yonsei.ac.kr",
+    "f_state" : "1"
+}
+
+###
+# 특정 친구관계 제거
+POST http://localhost:8080/api/friends/delete
+
+Content-Type: application/json
+
+{
+    "My_id": "tmp1@yonsei.ac.kr",
+    "Friend_id": "tmp2@yonsei.ac.kr",
+}
