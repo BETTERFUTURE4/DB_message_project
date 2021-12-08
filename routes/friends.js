@@ -55,7 +55,7 @@ router.post('/add', async (req,res,next) => {
         await query(queryString);
         res.send(`${My_id} - add friend : ${Friend_id}`);
     } else if (isFriend.length  > 0) {
-        res.send("Already frined");
+        res.send("Already friend");
     }else {
         res.send("No that person");
     }
