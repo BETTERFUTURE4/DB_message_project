@@ -66,7 +66,7 @@ router.get('/nearby', async(req, res, next) => {
                         (6371*acos(cos(radians('${rows.LATITUDE}'))*cos(radians(location.LATITUDE))*cos(radians(location.LONGTITUDE)-radians('${rows.LONGTITUDE}'))+sin(radians('${rows.LATITUDE}'))*sin(radians(location.LATITUDE))))
                         AS distance FROM user
                         LEFT JOIN location ON user.ID = location.USER_ID
-                        WHERE location.USER_ID != '${near_userID}'
+                        WHERE location.USER_ID != '${near_userID}' AND (location.LOCATION_STATE = 1 OR location.LOCATION_STATE = 2)
                         HAVING distance <= 0.5 ORDER BY distance`;
     const queryResult = await query (queryString);
     console.log(queryResult)
