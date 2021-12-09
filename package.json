@@ -19,5 +19,11 @@
     "mysql": "^2.18.1",
     "pug": "2.0.0-beta11",
     "socket.io": "^4.4.0"
-  }
+  },
+  "corsOrigin": [
+    "http://dbproject.duckdns.org:15000",
+    "http://165.132.105.26:15000"
+  ],
+  "apiPort": 15000,
+  "socketPort": 15001
 }
