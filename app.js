@@ -26,9 +26,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(history());
 
-
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 app.use('/api/user', userRouter);
 app.use('/api/chatlist', chatlistRouter);
 app.use('/api/friends',router_friends);
@@ -53,11 +53,12 @@ app.use(function(err, req, res, next) {
 
 // Cors --> cross domian problem solving for socket
 const cors = require('cors') // get cors module 
+const { corsOrigin } = require('./package.json');
 
 app.use(cors({ // register cors module
   credentials: true, // allow credentials
   origin: function(origin, callback) { // check API caller url
-    if(['http://localhost:8080'].indexOf(origin) != -1){ // url is allowed client url
+    if(!origin || corsOrigin.indexOf(origin) != -1){ // url is allowed client url
       callback(null, true);
     }
     else{
