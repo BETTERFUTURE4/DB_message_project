@@ -33,7 +33,7 @@ router.get('/SSID', async(req, res, next) => {
     const { userID, this_ssid } = req.body;
     const queryResult = await query (`SELECT NAME, TYPE, LOGIN_STATE, STATUS_MESSAGE
                                   FROM user WHERE ID IN (SELECT user_id FROM location
-                                  WHERE SSID = '${this_ssid}' AND LOCATION_STATE = 1 OR LOCATION_STATE = 2
+                                  WHERE SSID = '${this_ssid}' AND (LOCATION_STATE = 1 OR LOCATION_STATE = 2)
                                   AND USER_ID != '${userID}');`);
     if(queryResult.length > 0){
       res.json({
