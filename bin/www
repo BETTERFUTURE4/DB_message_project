@@ -20,7 +20,7 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-const { corsOrigin, apiPort, socketPort } = require('../package.json')
+const { corsOrigin, apiPort, socketPort } = require('../package.json');
 var server = http.createServer(app);
 var socket = http.createServer(app_socket);
 /**
