@@ -8,6 +8,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -21,9 +22,9 @@
     "socket.io": "^4.4.0"
   },
   "corsOrigin": [
-    "http://dbproject.duckdns.org:15000",
-    "http://165.132.105.26:15000"
+    "http://dbproject.duckdns.org:8601",
+    "http://165.132.105.26:8601"
   ],
-  "apiPort": 15000,
-  "socketPort": 15001
+  "apiPort": 8601,
+  "socketPort": 8602
 }
