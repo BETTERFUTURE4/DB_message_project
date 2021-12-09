@@ -1,14 +1,16 @@
 const mysql = require('mysql');
-/*
+
 const connection = mysql.createPool({
     host: '165.132.105.26',
     user: 'team06',
     password: 'project06', // DB password
-    database: '3306', // DB name
+    port: 3306,
+    database: 'database06', // DB name
     multipleStatements: true,
     connectionLimit: 1000,
 });
-*/
+
+/*
 const connection = mysql.createPool({
     host: 'localhost',
     user: 'root',
@@ -18,6 +20,7 @@ const connection = mysql.createPool({
     multipleStatements: true,
     connectionLimit: 1000,
 });
+*/
 
 // Send SQL to DB and Receive return value
 // Promise --> Async
