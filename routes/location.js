@@ -36,10 +36,12 @@ router.get('/SSID', async(req, res, next) => {
                                   WHERE SSID = '${this_ssid}' AND (LOCATION_STATE = 1 OR LOCATION_STATE = 2)
                                   AND USER_ID != '${userID}');`);
     if(queryResult.length > 0){
-      res.json({
-        success: true,
-        rows: queryResult
-      });
+//       res.json({
+//         success: true,
+//         rows: queryResult
+//       });
+      
+      res.send(queryResult)
     }
     else{
       res.json({
